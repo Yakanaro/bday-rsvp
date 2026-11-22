@@ -23,7 +23,7 @@
 
                     <div class="ticket-head">
                         <span class="ticket-kicker">День рождения</span>
-                        <h1>{{ config('invitation.host') }}</h1>
+                        <h1 class="flip-title" aria-label="{{ config('invitation.host') }}">@foreach (mb_str_split(config('invitation.host')) as $letter)<span class="flip-char" style="--i: {{ $loop->index }}" aria-hidden="true">{{ $letter }}</span>@endforeach</h1>
                     </div>
 
                     <dl class="ticket-data">
@@ -83,6 +83,10 @@
                     <div><span class="stub-label">Гость</span><span @class(['stub-guest', 'is-empty' => ! $ticketGuest]) data-stub-guest>{{ $ticketGuest?->full_name ?? '— — —' }}</span></div>
                     <div><span class="stub-label">Бар</span><span class="stub-drink" data-stub-drink>{{ $ticketGuest ? $ticketGuest->drink->code().' · '.$ticketGuest->drink->label() : 'не выбран' }}</span></div>
                     <div class="stub-barcode" aria-hidden="true"></div>
+                    <div @class(['stub-stamp', 'is-confirmed' => $ticketGuest]) data-stub-stamp aria-hidden="true">
+                        <span data-stamp-text>{{ $ticketGuest ? 'Подтверждено' : 'Приглашение' }}</span>
+                        <small>{{ config('invitation.date') }}</small>
+                    </div>
                     <small>Действителен {{ config('invitation.date') }}</small>
                 </aside>
             </article>

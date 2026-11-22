@@ -191,6 +191,96 @@ body {
     .drink:nth-child(n+2) .drink-box { border-top: 1.5px solid var(--ink); }
 }
 
+/* ---------- Opening sequence ----------
+   Ticket slides in, the name flips letter by letter like a departure board,
+   the rows print in, the barcode is scanned and the stamp lands on the stub. */
+.ticket {
+    animation:
+        ticket-in .9s cubic-bezier(.2, .9, .25, 1.12) both,
+        ticket-thud .28s ease-out 2.05s;
+    transform-origin: 50% 100%;
+}
+@keyframes ticket-in {
+    from { opacity: 0; transform: translateY(70px) rotate(-3deg) scale(.96); }
+    to { opacity: 1; transform: none; }
+}
+@keyframes ticket-thud {
+    40% { transform: translateY(3px) scale(.997); }
+}
+
+.ticket-main > *,
+.ticket-stub > :not(.stub-stamp),
+.chat-link,
+.page-note { animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; }
+.ticket-main > :nth-child(1) { animation-delay: .35s; }
+.ticket-main > :nth-child(2) { animation-delay: .45s; }
+.ticket-main > :nth-child(3) { animation-delay: 1s; }
+.ticket-main > :nth-child(4) { animation-delay: 1.1s; }
+.ticket-main > :nth-child(5) { animation-delay: 1.2s; }
+.ticket-stub > :nth-child(1) { animation-delay: .9s; }
+.ticket-stub > :nth-child(2) { animation-delay: 1s; }
+.ticket-stub > :nth-child(3) { animation-delay: 1.1s; }
+.ticket-stub > :nth-child(4) { animation-delay: 1.2s; }
+.ticket-stub > :nth-child(5) { animation-delay: 1.3s; }
+.chat-link { animation-delay: 1.5s; }
+.page-note { animation-delay: 1.6s; }
+@keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+}
+
+.flip-title { perspective: 600px; }
+.flip-char {
+    display: inline-block;
+    transform-origin: 50% 0;
+    animation: flip-in .55s cubic-bezier(.3, 1.45, .5, 1) both;
+    animation-delay: calc(.55s + var(--i) * 70ms);
+}
+@keyframes flip-in {
+    from { opacity: 0; transform: rotateX(-95deg); }
+    to { opacity: 1; transform: none; }
+}
+.stub-guest .flip-char { animation-delay: calc(var(--i) * 45ms); }
+
+.stub-barcode { position: relative; overflow: hidden; }
+.stub-barcode::after {
+    content: ""; position: absolute; left: -4px; right: -4px; top: 0; height: 2px;
+    background: var(--red); box-shadow: 0 0 10px 2px rgba(200, 16, 46, .55);
+    opacity: 0;
+    animation: scan 1s ease-in-out 1.35s 1 both;
+}
+@keyframes scan {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 1; }
+    50% { top: calc(100% - 2px); }
+    90% { opacity: 1; }
+    100% { top: 0; opacity: 0; }
+}
+
+.stub-stamp {
+    position: absolute; right: 16px; bottom: 74px;
+    display: grid; justify-items: center; gap: 2px;
+    padding: 7px 12px;
+    border: 2px solid var(--red); outline: 1px solid var(--red); outline-offset: 2px; border-radius: 4px;
+    color: var(--red); font-family: var(--font-display); text-transform: uppercase; letter-spacing: .12em; line-height: 1.1;
+    opacity: .82; mix-blend-mode: multiply; pointer-events: none;
+    transform: rotate(-14deg);
+    animation: stamp .45s cubic-bezier(.2, 1.6, .4, 1) 1.9s both;
+}
+.stub-stamp span { font-size: 14px; font-weight: 600; }
+.stub-stamp small { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; color: var(--red); }
+.stub-stamp.is-confirmed { background: rgba(200, 16, 46, .07); }
+.stub-stamp.is-restamped { animation: stamp .45s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes stamp {
+    0% { opacity: 0; transform: rotate(-14deg) scale(2.4); }
+    60% { opacity: .9; transform: rotate(-14deg) scale(.92); }
+    100% { opacity: .82; transform: rotate(-14deg) scale(1); }
+}
+
+@media (max-width: 760px) {
+    .stub-stamp { top: 22px; right: 18px; bottom: auto; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
 }

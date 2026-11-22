@@ -4,6 +4,14 @@
  * Without JavaScript the form still posts normally and the page comes back
  * with the ticket filled in.
  */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const restartAnimation = (element, className) => {
+    element.classList.remove(className);
+    void element.offsetWidth;
+    element.classList.add(className);
+};
+
 const form = document.getElementById('rsvp');
 
 if (form) {
@@ -17,6 +25,45 @@ if (form) {
     const stubGuest = document.querySelector('[data-stub-guest]');
     const stubDrink = document.querySelector('[data-stub-drink]');
     const chatLink = document.querySelector('[data-chat-link]');
+    const stamp = document.querySelector('[data-stub-stamp]');
+
+    const flipText = (element, text) => {
+        element.setAttribute('aria-label', text);
+        element.replaceChildren(...[...text].map((letter, index) => {
+            const span = document.createElement('span');
+            span.className = 'flip-char';
+            span.style.setProperty('--i', index);
+            span.setAttribute('aria-hidden', 'true');
+            span.textContent = letter;
+
+            return span;
+        }));
+    };
+
+    const rollNumber = (element, finalText) => {
+        if (prefersReducedMotion) {
+            element.textContent = finalText;
+
+            return;
+        }
+
+        const startedAt = performance.now();
+        const duration = 700;
+        const tick = (now) => {
+            const progress = Math.min((now - startedAt) / duration, 1);
+            const settledDigits = Math.floor(progress * finalText.length);
+            element.textContent = [...finalText]
+                .map((character, index) => (index < settledDigits || !/\d/.test(character)
+                    ? character
+                    : String(Math.floor(Math.random() * 10))))
+                .join('');
+
+            if (progress < 1) {
+                requestAnimationFrame(tick);
+            }
+        };
+        requestAnimationFrame(tick);
+    };
 
     const markInvalid = (input, isInvalid) => {
         if (isInvalid) {
@@ -38,14 +85,15 @@ if (form) {
         fields.hidden = true;
         done.hidden = false;
 
-        stubNumber.textContent = ticket.number;
-        stubGuest.textContent = ticket.name;
+        rollNumber(stubNumber, ticket.number);
+        flipText(stubGuest, ticket.name);
         stubGuest.classList.remove('is-empty');
         stubDrink.textContent = `${ticket.drink_code} · ${ticket.drink}`;
 
-        chatLink.classList.remove('is-ready');
-        void chatLink.offsetWidth;
-        chatLink.classList.add('is-ready');
+        stamp.querySelector('[data-stamp-text]').textContent = 'Подтверждено';
+        stamp.classList.add('is-confirmed');
+        restartAnimation(stamp, 'is-restamped');
+        restartAnimation(chatLink, 'is-ready');
     };
 
     [firstNameInput, lastNameInput].forEach((input) => {
