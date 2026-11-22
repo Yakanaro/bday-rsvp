@@ -68,19 +68,28 @@
                             <button class="rsvp-submit" type="submit">Получить билет</button>
                         </div>
 
-                        <div class="rsvp-done" data-rsvp-done @if (! $ticketGuest) hidden @endif>
-                            <p>
-                                <strong data-done-name>{{ $ticketGuest?->full_name }}</strong>
-                                Билет оформлен на ваше имя. На баре для вас — <span data-done-drink>{{ $ticketGuest?->drink->phrase() }}</span>.
-                            </p>
-                            <button type="button" class="rsvp-edit" data-rsvp-edit>Изменить ответ</button>
+                        <div class="coupon" data-rsvp-done @if (! $ticketGuest) hidden @endif>
+                            <div class="coupon-top">
+                                <span>Контрольный талон</span>
+                                <span data-done-number>{{ $ticketGuest?->ticket_number }}</span>
+                            </div>
+                            <strong class="coupon-name flip-in" data-done-name>{{ $ticketGuest?->full_name }}</strong>
+                            <p class="coupon-text">Билет оформлен на ваше имя. На баре для вас — <span data-done-drink>{{ $ticketGuest?->drink->phrase() }}</span>.</p>
+                            <div class="coupon-bottom">
+                                <div class="punch-grid" data-punch @if ($ticketGuest) data-punched="{{ $ticketGuest->ticket_number }}" @endif aria-hidden="true"></div>
+                                <button type="button" class="rsvp-edit" data-rsvp-edit>Изменить ответ</button>
+                            </div>
+                            <div class="coupon-stamp" data-coupon-stamp aria-hidden="true">
+                                <span>Вы в списке</span>
+                                <small>{{ config('invitation.date') }}</small>
+                            </div>
                         </div>
                     </form>
                 </div>
 
                 <aside class="ticket-stub" aria-label="Корешок билета">
                     <div><span class="stub-label">Билет</span><span class="stub-number" data-stub-number>{{ $ticketGuest?->ticket_number ?? '№ ————' }}</span></div>
-                    <div><span class="stub-label">Гость</span><span @class(['stub-guest', 'is-empty' => ! $ticketGuest]) data-stub-guest>{{ $ticketGuest?->full_name ?? '— — —' }}</span></div>
+                    <div><span class="stub-label">Гость</span><span @class(['stub-guest', 'flip-in', 'is-empty' => ! $ticketGuest]) data-stub-guest>{{ $ticketGuest?->full_name ?? '— — —' }}</span></div>
                     <div><span class="stub-label">Бар</span><span class="stub-drink" data-stub-drink>{{ $ticketGuest ? $ticketGuest->drink->code().' · '.$ticketGuest->drink->label() : 'не выбран' }}</span></div>
                     <div class="stub-barcode" aria-hidden="true"></div>
                     <div @class(['stub-stamp', 'is-confirmed' => $ticketGuest]) data-stub-stamp aria-hidden="true">
@@ -96,6 +105,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
             </a>
             <p class="page-note">Адрес и детали вечера — в чате</p>
+            <footer class="page-credit">Created by Sergey Druzhinin</footer>
         </main>
     </body>
 </html>

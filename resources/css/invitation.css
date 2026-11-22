@@ -17,7 +17,7 @@
 
 [hidden] { display: none !important; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
 
 body {
     margin: 0;
@@ -117,15 +117,61 @@ body {
 
 .rsvp-error { margin: 0; color: var(--red); font-size: 13px; }
 
-.rsvp-done { display: grid; gap: 10px; border: 1.5px dashed var(--red); padding: 18px; line-height: 1.6; }
-.rsvp-done p { margin: 0; }
-.rsvp-done strong {
-    display: block; font-family: var(--font-display); font-size: 24px; font-weight: 500;
-    color: var(--red); text-transform: uppercase; letter-spacing: .03em; overflow-wrap: anywhere;
+.rsvp { position: relative; }
+
+/* ---------- Control coupon shown after the reply ---------- */
+.coupon {
+    position: relative; display: grid; gap: 12px;
+    padding: 16px 24px 18px;
+    background: var(--red); color: var(--paper); border-radius: 6px;
+    -webkit-mask:
+        radial-gradient(circle 10px at 0 50%, transparent 97%, #000) left / 51% 100% no-repeat,
+        radial-gradient(circle 10px at 100% 50%, transparent 97%, #000) right / 51% 100% no-repeat;
+    mask:
+        radial-gradient(circle 10px at 0 50%, transparent 97%, #000) left / 51% 100% no-repeat,
+        radial-gradient(circle 10px at 100% 50%, transparent 97%, #000) right / 51% 100% no-repeat;
 }
+.coupon-top {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 252, 249, .78);
+    border-bottom: 1.5px dashed rgba(255, 252, 249, .4); padding-bottom: 10px;
+}
+.coupon-top span:last-child { font-variant-numeric: tabular-nums; }
+.coupon-name {
+    display: block; font-family: var(--font-display); font-size: clamp(26px, 6vw, 34px); font-weight: 600;
+    line-height: 1.05; text-transform: uppercase; letter-spacing: .03em; overflow-wrap: anywhere;
+    perspective: 500px;
+}
+.coupon-text { margin: 0; font-size: 13px; line-height: 1.6; color: rgba(255, 252, 249, .92); }
+.coupon-bottom { display: flex; align-items: center; gap: 18px; padding-top: 4px; min-height: 46px; padding-right: 120px; }
 .rsvp-edit {
-    justify-self: start; background: none; border: 0; padding: 0; cursor: pointer;
-    font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px;
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font: inherit; font-size: 13px; color: inherit; text-decoration: underline; text-underline-offset: 3px;
+    white-space: nowrap;
+}
+.rsvp-edit:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+
+.coupon-stamp {
+    position: absolute; right: 22px; bottom: 16px;
+    display: grid; justify-items: center; gap: 2px; padding: 7px 12px;
+    border: 2px solid var(--paper); outline: 1px solid var(--paper); outline-offset: 2px; border-radius: 4px;
+    color: var(--paper); font-family: var(--font-display); text-transform: uppercase; letter-spacing: .12em; line-height: 1.1;
+    opacity: .92; transform: rotate(-9deg); pointer-events: none;
+}
+.coupon-stamp span { font-size: 15px; font-weight: 600; }
+.coupon-stamp small { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; }
+.coupon-stamp.is-waiting { opacity: 0; }
+.coupon-stamp.is-stamping { animation: coupon-stamp .45s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes coupon-stamp {
+    0% { opacity: 0; transform: rotate(-16deg) scale(2.6); }
+    60% { opacity: 1; transform: rotate(-9deg) scale(.9); }
+    100% { opacity: .92; transform: rotate(-9deg) scale(1); }
+}
+
+.coupon.is-printing { animation: coupon-feed .6s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes coupon-feed {
+    from { clip-path: inset(0 0 100% 0); transform: translateY(-8px); }
+    to { clip-path: inset(0 0 0 0); transform: none; }
 }
 
 /* ---------- Stub ---------- */
@@ -167,16 +213,22 @@ body {
 .chat-link.is-ready { animation: nudge 1.2s ease 2; }
 @keyframes nudge { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
 
+.page-credit {
+    justify-self: center; margin-top: clamp(12px, 4vw, 28px); padding-top: 14px;
+    border-top: 1px solid rgba(255, 252, 249, .25);
+    color: rgba(255, 252, 249, .55); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    animation: rise .6s cubic-bezier(.2, .8, .2, 1) 1.7s both;
+}
+
 .page-note { justify-self: center; margin: 0; text-align: center; color: rgba(255, 252, 249, .8); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 760px) {
     .ticket { grid-template-columns: 1fr; }
-    .ticket-stub { border-left: 0; border-top: 2px dashed var(--perf); flex-direction: row; flex-wrap: wrap; align-items: flex-end; }
+    .ticket-stub { border-left: 0; border-top: 2px dashed var(--perf); gap: 18px; }
     .ticket-stub::before, .ticket-stub::after { top: -15px; bottom: auto; }
     .ticket-stub::before { left: -14px; }
     .ticket-stub::after { left: auto; right: -14px; }
-    .ticket-stub > * { flex: 1 1 140px; }
     .ticket-data { grid-template-columns: 1fr 1fr; }
     .ticket-data div:nth-child(3) { grid-column: 1 / -1; border-left: 0; border-top: 1.5px solid var(--ink); }
 }
@@ -240,7 +292,8 @@ body {
     from { opacity: 0; transform: rotateX(-95deg); }
     to { opacity: 1; transform: none; }
 }
-.stub-guest .flip-char { animation-delay: calc(var(--i) * 45ms); }
+.flip-word { display: inline-block; max-width: 100%; }
+.flip-in .flip-char { animation-delay: calc(var(--flip-start, 0ms) + var(--i) * 45ms); }
 
 .stub-barcode { position: relative; overflow: hidden; }
 .stub-barcode::after {
@@ -263,13 +316,13 @@ body {
     padding: 7px 12px;
     border: 2px solid var(--red); outline: 1px solid var(--red); outline-offset: 2px; border-radius: 4px;
     color: var(--red); font-family: var(--font-display); text-transform: uppercase; letter-spacing: .12em; line-height: 1.1;
-    opacity: .82; mix-blend-mode: multiply; pointer-events: none;
+    opacity: .9; background: var(--paper); pointer-events: none;
     transform: rotate(-14deg);
     animation: stamp .45s cubic-bezier(.2, 1.6, .4, 1) 1.9s both;
 }
 .stub-stamp span { font-size: 14px; font-weight: 600; }
 .stub-stamp small { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; color: var(--red); }
-.stub-stamp.is-confirmed { background: rgba(200, 16, 46, .07); }
+.stub-stamp.is-confirmed { background: var(--tint); }
 .stub-stamp.is-restamped { animation: stamp .45s cubic-bezier(.2, 1.6, .4, 1) both; }
 @keyframes stamp {
     0% { opacity: 0; transform: rotate(-14deg) scale(2.4); }
@@ -277,8 +330,36 @@ body {
     100% { opacity: .82; transform: rotate(-14deg) scale(1); }
 }
 
+/* Ticket punch on the control coupon: holes show the white ticket through the
+   red coupon, the punched-out red bits fall onto the ticket. The hole pattern
+   comes from the ticket number. */
+.punch-grid {
+    display: grid; grid-template-columns: repeat(3, 9px); gap: 5px; flex: none;
+}
+.punch-hole { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255, 252, 249, .22); }
+.punch-hole.is-hole { background: var(--paper); box-shadow: inset 0 1.5px 2px rgba(42, 12, 16, .55); }
+.punch-hole.is-hole.is-new { animation: punch-in .22s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: calc(var(--i) * 35ms); }
+@keyframes punch-in {
+    from { transform: scale(0); }
+    to { transform: none; }
+}
+.punch-chad {
+    position: absolute; z-index: 3; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--red); box-shadow: 0 1px 2px rgba(42, 12, 16, .35);
+    pointer-events: none;
+}
+
 @media (max-width: 760px) {
-    .stub-stamp { top: 22px; right: 18px; bottom: auto; }
+    .stub-stamp { right: 18px; bottom: 64px; }
+}
+
+@media (max-width: 420px) {
+    .coupon { padding-inline: 20px; }
+    .coupon-bottom { padding-right: 112px; gap: 14px; }
+    .coupon-stamp { right: 14px; bottom: 18px; padding: 5px 8px; }
+    .coupon-stamp span { font-size: 12px; }
+    .coupon-stamp small { font-size: 9px; }
+    .rsvp-edit { font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

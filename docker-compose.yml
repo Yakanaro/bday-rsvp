@@ -31,6 +31,7 @@ services:
       - node-modules:/var/www/html/node_modules
     environment:
       DEV_SERVER_ORIGIN: http://localhost:${VITE_PORT:-5181}
+      VITE_USE_POLLING: "true"
 
   mysql:
     image: mysql:8.4
