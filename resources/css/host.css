@@ -1,0 +1,147 @@
+/* Host pages: the guest list printed on the same paper as the invitation ticket. */
+:root {
+    color-scheme: light;
+    --red: #C8102E;
+    --paper: #FFFCF9;
+    --ink: #2A0C10;
+    --muted: #9A7378;
+    --perf: #E6C9CD;
+    --tint: #FBEDEE;
+    --font-display: "Oswald", "Arial Narrow", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--red) repeating-linear-gradient(-45deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 16px);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+.host-page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-block: max(clamp(24px, 5vw, 56px), env(safe-area-inset-top, 0px)) max(clamp(32px, 5vw, 56px), env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.host-page--narrow { max-width: 480px; }
+
+.sheet {
+    background: var(--paper);
+    border-radius: 14px;
+    box-shadow: 0 30px 50px -25px rgba(40, 0, 6, .55);
+    padding: clamp(22px, 4vw, 40px);
+    display: grid;
+    gap: 24px;
+}
+
+.sheet-top {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    border-bottom: 1.5px solid var(--ink); padding-bottom: 12px;
+}
+.sheet-top b { color: var(--red); font-weight: 500; }
+.sheet-top form { margin: 0; }
+
+h1 {
+    margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(40px, 8vw, 72px); line-height: .95; color: var(--red);
+}
+
+h2, .section-title {
+    margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 12px; color: var(--red);
+}
+h2::after { content: ""; flex: 1; border-top: 1.5px dashed var(--perf); }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Buttons ---------- */
+.btn {
+    border: 0; padding: 15px; cursor: pointer;
+    font-family: var(--font-display); font-size: 17px; letter-spacing: .2em; text-transform: uppercase;
+}
+.btn--dark { background: var(--ink); color: var(--paper); }
+.btn--dark:hover { background: var(--red); }
+.btn:focus-visible, .link-btn:focus-visible, a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.link-btn {
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font: inherit; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+    text-decoration: underline; text-underline-offset: 3px;
+}
+.link-btn:hover { color: var(--red); }
+.link-btn--danger { color: var(--muted); letter-spacing: .06em; }
+.link-btn--danger:hover { color: var(--red); }
+
+/* ---------- Login ---------- */
+.login-lead { margin: 0; line-height: 1.6; }
+.login-form { display: grid; gap: 18px; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.field input {
+    width: 100%; font-family: var(--font-display); font-size: 22px; color: var(--ink);
+    border: 0; border-bottom: 1.5px solid var(--ink); background: transparent; padding: 6px 0; border-radius: 0;
+    letter-spacing: .08em;
+}
+.field input:focus { outline: none; border-bottom-color: var(--red); }
+.field input[aria-invalid="true"] { border-bottom-color: var(--red); }
+.form-error { margin: 0; color: var(--red); font-size: 13px; }
+.back-link { justify-self: start; color: var(--muted); font-size: 12px; letter-spacing: .06em; }
+.back-link:hover { color: var(--red); }
+
+/* ---------- Guest list ---------- */
+.list-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.total { margin: 0; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.total b { font-family: var(--font-display); font-size: 40px; font-weight: 600; color: var(--ink); letter-spacing: 0; margin-right: 6px; font-variant-numeric: tabular-nums; }
+
+.status { margin: 0; border: 1.5px dashed var(--red); padding: 12px 14px; color: var(--red); }
+
+.bar { display: grid; gap: 10px; }
+.bar-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(5, 1fr); border: 1.5px solid var(--ink);
+}
+.bar-item { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; gap: 6px 10px; padding: 14px; align-items: center; }
+.bar-item + .bar-item { border-left: 1.5px solid var(--ink); }
+.bar-code { font-size: 12px; color: var(--red); letter-spacing: .08em; }
+.bar-item .drink-icon { width: 22px; height: 22px; color: var(--red); justify-self: end; }
+.bar-name { grid-column: 1 / -1; font-family: var(--font-display); font-size: 16px; text-transform: uppercase; letter-spacing: .03em; }
+.bar-count { grid-column: 1 / -1; font-family: var(--font-display); font-size: 44px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.bar-item.is-zero .bar-count { color: var(--perf); }
+
+.empty { border: 1.5px dashed var(--perf); padding: 22px; line-height: 1.6; }
+.empty p { margin: 0; }
+.empty a { color: var(--red); }
+
+.table-wrap { overflow-x: auto; border: 1.5px solid var(--ink); }
+.guests { width: 100%; border-collapse: collapse; min-width: 560px; }
+.guests th {
+    text-align: left; font-weight: 500; font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); padding: 10px 14px; border-bottom: 1.5px solid var(--ink);
+}
+.guests td { padding: 12px 14px; border-top: 1px dashed var(--perf); vertical-align: middle; }
+.guests tbody tr:first-child td { border-top: 0; }
+.guests tbody tr:hover { background: var(--tint); }
+.guests .num { color: var(--red); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.guests .name { font-family: var(--font-display); font-size: 18px; text-transform: uppercase; letter-spacing: .03em; }
+.guests .when { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.guests .actions { text-align: right; }
+.guests .actions form { margin: 0; }
+.drink-tag { font-size: 11px; color: var(--red); letter-spacing: .08em; margin-right: 6px; }
+
+@media (max-width: 760px) {
+    .bar-grid { grid-template-columns: 1fr 1fr; }
+    .bar-item:nth-child(odd) { border-left: 0; }
+    .bar-item:nth-child(n+3) { border-top: 1.5px solid var(--ink); }
+    .bar-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}

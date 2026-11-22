@@ -1,0 +1,196 @@
+/* Invitation ticket: white ticket with a perforated stub on a striped red ground. */
+:root {
+    color-scheme: light;
+    --red: #C8102E;
+    --paper: #FFFCF9;
+    --ink: #2A0C10;
+    --muted: #9A7378;
+    --perf: #E6C9CD;
+    --tint: #FBEDEE;
+    --font-display: "Oswald", "Arial Narrow", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--red) repeating-linear-gradient(-45deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 16px);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+.page {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    gap: 22px;
+    padding-block: max(clamp(24px, 6vw, 72px), env(safe-area-inset-top, 0px)) max(clamp(32px, 6vw, 72px), env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Ticket ---------- */
+.ticket {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    background: var(--paper);
+    border-radius: 14px;
+    box-shadow: 0 30px 50px -25px rgba(40, 0, 6, .55);
+}
+
+.ticket-main { padding: clamp(22px, 4vw, 40px); display: grid; gap: 26px; min-width: 0; }
+
+.ticket-top {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    border-bottom: 1.5px solid var(--ink); padding-bottom: 12px;
+}
+.ticket-top b { color: var(--red); font-weight: 500; }
+
+.ticket-head { display: grid; gap: 2px; }
+.ticket-kicker { font-family: var(--font-display); font-size: 16px; letter-spacing: .4em; text-transform: uppercase; }
+.ticket h1 {
+    font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(60px, 11vw, 112px); line-height: .9; margin: 0; color: var(--red); letter-spacing: .01em;
+}
+
+.ticket-data { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid var(--ink); margin: 0; }
+.ticket-data div { padding: 12px 14px; display: grid; gap: 4px; }
+.ticket-data div + div { border-left: 1.5px solid var(--ink); }
+.ticket-data dt { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.ticket-data dd { margin: 0; font-family: var(--font-display); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.ticket-section {
+    margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 12px; color: var(--red);
+}
+.ticket-section::after { content: ""; flex: 1; border-top: 1.5px dashed var(--perf); }
+
+/* ---------- Form ---------- */
+.rsvp, .rsvp-fields { display: grid; gap: 20px; }
+.name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label, .rsvp legend { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.field input {
+    width: 100%; min-width: 0;
+    font-family: var(--font-display); font-size: 22px; color: var(--ink);
+    border: 0; border-bottom: 1.5px solid var(--ink); background: transparent; padding: 6px 0; border-radius: 0;
+    text-transform: uppercase; letter-spacing: .04em;
+}
+.field input::placeholder { color: var(--perf); }
+.field input:focus { outline: none; border-bottom-color: var(--red); }
+.field input[aria-invalid="true"] { border-bottom-color: var(--red); }
+
+.rsvp fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; min-width: 0; }
+
+.drinks { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid var(--ink); }
+.drink { position: relative; display: block; cursor: pointer; }
+.drink input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.drink:nth-child(even) .drink-box { border-left: 1.5px solid var(--ink); }
+.drink:nth-child(n+3) .drink-box { border-top: 1.5px solid var(--ink); }
+.drink:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.drink-box { display: flex; align-items: center; gap: 12px; height: 100%; padding: 12px 14px; transition: background .18s, color .18s; }
+.drink-code { font-size: 12px; color: var(--red); letter-spacing: .08em; width: 34px; }
+.drink-name { font-family: var(--font-display); font-size: 18px; text-transform: uppercase; letter-spacing: .03em; flex: 1; }
+.drink-icon { width: 22px; height: 22px; flex: none; color: var(--red); }
+.drink:hover .drink-box { background: var(--tint); }
+.drink input:checked + .drink-box { background: var(--red); color: var(--paper); }
+.drink input:checked + .drink-box .drink-code,
+.drink input:checked + .drink-box .drink-icon { color: var(--paper); }
+.drink input:focus-visible + .drink-box { outline: 2px solid var(--ink); outline-offset: -5px; }
+
+.rsvp-submit {
+    background: var(--ink); color: var(--paper); border: 0; padding: 16px; cursor: pointer;
+    font-family: var(--font-display); font-size: 18px; letter-spacing: .2em; text-transform: uppercase;
+}
+.rsvp-submit:hover { background: var(--red); }
+.rsvp-submit:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.rsvp-error { margin: 0; color: var(--red); font-size: 13px; }
+
+.rsvp-done { display: grid; gap: 10px; border: 1.5px dashed var(--red); padding: 18px; line-height: 1.6; }
+.rsvp-done p { margin: 0; }
+.rsvp-done strong {
+    display: block; font-family: var(--font-display); font-size: 24px; font-weight: 500;
+    color: var(--red); text-transform: uppercase; letter-spacing: .03em; overflow-wrap: anywhere;
+}
+.rsvp-edit {
+    justify-self: start; background: none; border: 0; padding: 0; cursor: pointer;
+    font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ---------- Stub ---------- */
+.ticket-stub {
+    position: relative; border-left: 2px dashed var(--perf);
+    padding: clamp(22px, 4vw, 32px) 24px;
+    display: flex; flex-direction: column; gap: 22px; justify-content: space-between;
+}
+.ticket-stub::before,
+.ticket-stub::after {
+    content: ""; position: absolute; left: -15px; width: 28px; height: 28px; border-radius: 50%; background: var(--red);
+}
+.ticket-stub::before { top: -14px; }
+.ticket-stub::after { bottom: -14px; }
+.stub-label { display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.stub-number { font-family: var(--font-display); font-size: 40px; font-weight: 600; color: var(--red); line-height: 1; font-variant-numeric: tabular-nums; }
+.stub-guest { font-family: var(--font-display); font-size: 22px; text-transform: uppercase; line-height: 1.15; overflow-wrap: anywhere; }
+.stub-guest.is-empty { color: var(--perf); }
+.stub-drink { font-size: 14px; }
+.stub-barcode {
+    height: 64px;
+    background: repeating-linear-gradient(90deg,
+        var(--ink) 0 2px, transparent 2px 5px, var(--ink) 5px 6px, transparent 6px 9px,
+        var(--ink) 9px 13px, transparent 13px 15px, var(--ink) 15px 16px, transparent 16px 21px);
+}
+.ticket-stub small { font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+
+/* ---------- Chat link ---------- */
+.chat-link {
+    justify-self: center; display: inline-flex; align-items: center; gap: 10px;
+    background: var(--paper); color: var(--red); text-decoration: none;
+    padding: 16px 30px; border-radius: 999px;
+    font-family: var(--font-display); font-size: 17px; letter-spacing: .14em; text-transform: uppercase;
+    box-shadow: 0 14px 30px -14px rgba(40, 0, 6, .6);
+}
+.chat-link svg { width: 18px; height: 18px; flex: none; }
+.chat-link:hover { background: var(--ink); color: var(--paper); }
+.chat-link:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+.chat-link.is-ready { animation: nudge 1.2s ease 2; }
+@keyframes nudge { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
+
+.page-note { justify-self: center; margin: 0; text-align: center; color: rgba(255, 252, 249, .8); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 760px) {
+    .ticket { grid-template-columns: 1fr; }
+    .ticket-stub { border-left: 0; border-top: 2px dashed var(--perf); flex-direction: row; flex-wrap: wrap; align-items: flex-end; }
+    .ticket-stub::before, .ticket-stub::after { top: -15px; bottom: auto; }
+    .ticket-stub::before { left: -14px; }
+    .ticket-stub::after { left: auto; right: -14px; }
+    .ticket-stub > * { flex: 1 1 140px; }
+    .ticket-data { grid-template-columns: 1fr 1fr; }
+    .ticket-data div:nth-child(3) { grid-column: 1 / -1; border-left: 0; border-top: 1.5px solid var(--ink); }
+}
+
+@media (max-width: 560px) {
+    .name-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .drinks { grid-template-columns: 1fr; }
+    .drink:nth-child(even) .drink-box { border-left: 0; }
+    .drink:nth-child(n+2) .drink-box { border-top: 1.5px solid var(--ink); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
