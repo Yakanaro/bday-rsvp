@@ -175,6 +175,54 @@ body {
     to { clip-path: inset(0 0 0 0); transform: none; }
 }
 
+/* ---------- Route map ----------
+   The live Yandex map with muted, slightly warm colours so it sits on the
+   ticket paper but stays easy to read; the venue pin keeps a hint of colour.
+   Clicking anywhere opens the venue in Yandex Maps. */
+.route-card {
+    display: grid; gap: 16px; padding: clamp(18px, 3vw, 26px);
+    background: var(--paper); border-radius: 14px;
+    box-shadow: 0 30px 50px -25px rgba(40, 0, 6, .55);
+}
+.route-map { margin: 0; display: grid; border: 1.5px solid var(--ink); }
+.route-map-frame {
+    position: relative; display: block; height: clamp(220px, 34vw, 300px);
+    overflow: hidden; background: var(--paper); isolation: isolate;
+}
+.route-map-frame iframe {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+    filter: saturate(.35) sepia(.12) contrast(1.04);
+    pointer-events: none; transition: filter .2s;
+}
+.route-map-frame::after {
+    content: ""; position: absolute; inset: 8px; z-index: 2; pointer-events: none;
+    border: 1px dashed rgba(42, 12, 16, .35);
+}
+.route-map-corner {
+    position: absolute; left: 0; bottom: 0; z-index: 3;
+    background: var(--ink); color: var(--paper); padding: 5px 10px;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+}
+.route-map-frame:hover iframe { filter: saturate(.6) sepia(.06); }
+.route-map-frame:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.route-map-caption {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px 18px; flex-wrap: wrap;
+    padding: 12px 14px; border-top: 1.5px solid var(--ink);
+    font-family: var(--font-display); font-size: 18px; text-transform: uppercase; letter-spacing: .03em;
+}
+.route-map-caption small {
+    display: block; margin-top: 2px; font-family: var(--font-mono); font-size: 12px;
+    text-transform: none; letter-spacing: .02em; color: var(--muted);
+}
+.route-map-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.route-map-links a {
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    border: 1.5px solid var(--ink); color: var(--ink); text-decoration: none;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+}
+.route-map-links a:hover { background: var(--red); border-color: var(--red); color: var(--paper); }
+.route-map-links a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
 /* ---------- Stub ---------- */
 .ticket-stub {
     position: relative; border-left: 2px dashed var(--perf);
@@ -263,6 +311,7 @@ body {
 
 .ticket-main > *,
 .ticket-stub > :not(.stub-stamp),
+.route-card,
 .chat-link,
 .page-note { animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; }
 .ticket-main > :nth-child(1) { animation-delay: .35s; }
@@ -275,6 +324,7 @@ body {
 .ticket-stub > :nth-child(3) { animation-delay: 1.1s; }
 .ticket-stub > :nth-child(4) { animation-delay: 1.2s; }
 .ticket-stub > :nth-child(5) { animation-delay: 1.3s; }
+.route-card { animation-delay: 1.4s; }
 .chat-link { animation-delay: 1.5s; }
 .page-note { animation-delay: 1.6s; }
 @keyframes rise {

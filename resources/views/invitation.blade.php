@@ -100,6 +100,24 @@
                 </aside>
             </article>
 
+            <section class="route-card" aria-labelledby="route-title">
+                <h2 class="ticket-section" id="route-title">Схема проезда</h2>
+
+                <figure class="route-map">
+                    <a class="route-map-frame" href="{{ $venueMap['yandex'] }}" target="_blank" rel="noopener" aria-label="Открыть {{ config('invitation.address') }} в Яндекс Картах">
+                        <iframe src="{{ $venueMap['embed'] }}" title="Карта: {{ config('invitation.city') }}, {{ config('invitation.address') }}" loading="lazy" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <span class="route-map-corner" aria-hidden="true">{{ config('invitation.city') }}</span>
+                    </a>
+                    <figcaption class="route-map-caption">
+                        <span>{{ config('invitation.place') }}<small>{{ config('invitation.city') }}, {{ config('invitation.address') }}</small></span>
+                        <span class="route-map-links">
+                            <a href="{{ $venueMap['yandex'] }}" target="_blank" rel="noopener">Яндекс Карты</a>
+                            <a href="{{ $venueMap['twoGis'] }}" target="_blank" rel="noopener">2ГИС</a>
+                        </span>
+                    </figcaption>
+                </figure>
+            </section>
+
             <a class="chat-link" href="{{ config('invitation.chat_url') }}" target="_blank" rel="noopener" data-chat-link>
                 Перейти в чат гостей
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>

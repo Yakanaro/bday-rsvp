@@ -20,7 +20,15 @@ return [
 
     'place' => 'Ресторан-пивоварня',
 
+    'city' => 'Петрозаводск',
+
     'address' => 'пл. Гагарина, 1',
+
+    /*
+    | Point for the venue pin on the route map (Paulaner, пл. Гагарина, 1).
+    */
+
+    'coordinates' => ['lat' => 61.784308, 'lon' => 34.346825],
 
     'chat_url' => env('INVITATION_CHAT_URL', 'https://t.me/'),
 

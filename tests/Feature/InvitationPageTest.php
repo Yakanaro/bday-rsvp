@@ -36,6 +36,21 @@ class InvitationPageTest extends TestCase
         $response->assertSeeInOrder(['Начало', '18:00', 'Место', 'Ресторан-пивоварня', 'пл. Гагарина, 1']);
     }
 
+    public function test_route_map_pins_the_venue(): void
+    {
+        config([
+            'invitation.city' => 'Петрозаводск',
+            'invitation.address' => 'пл. Гагарина, 1',
+            'invitation.coordinates' => ['lat' => 61.784308, 'lon' => 34.346825],
+        ]);
+
+        $response = $this->get(route('invitation'));
+
+        $response->assertSee('Схема проезда');
+        $response->assertSee('https://yandex.ru/map-widget/v1/?ll=34.346825%2C61.784308&amp;z=17&amp;pt=34.346825%2C61.784308%2Cpm2rdl', false);
+        $response->assertSee('https://2gis.ru/search/'.rawurlencode('Петрозаводск, пл. Гагарина, 1'), false);
+    }
+
     public function test_chat_button_uses_the_configured_chat_url(): void
     {
         config(['invitation.chat_url' => 'https://t.me/+evgeny-guests']);
