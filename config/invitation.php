@@ -7,9 +7,8 @@ return [
     | Birthday Invitation
     |--------------------------------------------------------------------------
     |
-    | Event details shown on the invitation ticket. Date, time and place are
-    | placeholders until the host confirms them. The guest chat link is read
-    | from the environment so it can be changed without touching the code.
+    | Event details shown on the invitation ticket. The guest chat link is
+    | read from the environment so it can be changed without touching the code.
     |
     */
 
@@ -17,9 +16,11 @@ return [
 
     'date' => '12.12.2026',
 
-    'time' => '19:00',
+    'time' => '18:00',
 
-    'place' => 'В чате гостей',
+    'place' => 'Ресторан-пивоварня',
+
+    'address' => 'пл. Гагарина, 1',
 
     'chat_url' => env('INVITATION_CHAT_URL', 'https://t.me/'),
 

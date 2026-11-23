@@ -29,7 +29,7 @@
                     <dl class="ticket-data">
                         <div><dt>Дата</dt><dd>{{ config('invitation.date') }}</dd></div>
                         <div><dt>Начало</dt><dd>{{ config('invitation.time') }}</dd></div>
-                        <div><dt>Место</dt><dd>{{ config('invitation.place') }}</dd></div>
+                        <div><dt>Место</dt><dd>{{ config('invitation.place') }}<small>{{ config('invitation.address') }}</small></dd></div>
                     </dl>
 
                     <h2 class="ticket-section">Регистрация гостя</h2>
@@ -104,7 +104,7 @@
                 Перейти в чат гостей
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
             </a>
-            <p class="page-note">Адрес и детали вечера — в чате</p>
+            <p class="page-note">Детали вечера — в чате</p>
             <footer class="page-credit">Created by Sergey Druzhinin</footer>
         </main>
     </body>

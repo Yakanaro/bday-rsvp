@@ -29,6 +29,13 @@ class InvitationPageTest extends TestCase
         }
     }
 
+    public function test_ticket_shows_the_event_time_and_venue(): void
+    {
+        $response = $this->get(route('invitation'));
+
+        $response->assertSeeInOrder(['Начало', '18:00', 'Место', 'Ресторан-пивоварня', 'пл. Гагарина, 1']);
+    }
+
     public function test_chat_button_uses_the_configured_chat_url(): void
     {
         config(['invitation.chat_url' => 'https://t.me/+evgeny-guests']);
